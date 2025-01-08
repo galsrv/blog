@@ -1,0 +1,22 @@
+<div class='container-sm p-1 my-3 bg-dark text-white'>
+    <ul class='nav bg-dark'>
+        <li class='nav-item'>
+            <a class='nav-link link-light' href={% url 'index' %}>Main page</a>
+        </li>
+        <li class='nav-item'>
+            <a class='nav-link link-light' href={% url 'blogs_list' %}>Blogs</a>
+        </li>
+        <li class='nav-item'>
+            <a class='nav-link link-light' href={% url 'bloggers_list' %}>Bloggers</a>
+            {% if user.is_authenticated %}
+                <li class='nav-item'><label class='nav-link link-light'> User: {{ user.username }}</label></li>
+                <li class='nav-item'><a class='nav-link link-light' href={% url 'blogger_page' user.id %}>My blogs</a></li>
+                <li class='nav-item'><a class='nav-link link-light' href={% url 'blog_create' %}>Create new blog</a></li>
+                <li class='nav-item'><a class='nav-link link-light' href={% url 'logout' %}>Logout</a></li>
+            {% else %}
+            <li class='nav-item'><a class='nav-link link-light' href={% url 'signup' %}>Signup</a></th></li>
+            <li class='nav-item'><a class='nav-link link-light' href={% url 'login' %}>Login</a></th></li>
+            {% endif %}
+    </ul>
+</div>
+

@@ -1,0 +1,7 @@
+
+- CBV
+- Docker
+- CI/CD
+- REST API
+- Dummy data enter
+- Sending the email from outlook

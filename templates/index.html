@@ -1,0 +1,48 @@
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Blog site</title>
+</head>
+<body>
+    {% include 'includes/header.html' %}
+    <div class="container">
+        <h2>Hi,</h2>
+        <p>
+        I am Aleksei and this is my pet project.<br>
+        Originally, I was going to get some practice after finishing a few study cources on programming.<br>
+        But, after all, I deciced to stay this modest resorce online and present it as my CV.<br>
+        My contacts are below the page.
+        </p><p>
+        Features:
+        <ul>
+            <li>Blogs creation, editing and deletion</li>
+            <li>Commenting on blogs, comments deletion</li>
+            <li>Bloggers' pages</li>
+        </ul>
+        </p><p>
+        Stack and technologies:
+        <ul>
+        <li><b>Django</b></li>
+        The standard set of MTV - Models, Templates, Views - is used.<br>
+        The tests are based on django.test library<br>
+        The logging set up is quite basic.
+        <li><b>PostgreSQL</b></li>
+        I can't say I am a database expert, but using a modern DBMS is a right thing to do, isn't it?
+        <li><b>Bootstrap</b></li>
+        As you can notice, Bootstrap styles are applied. The frontend appearance wasn't the goal of the project, but anyway.
+        <li><b>Github</b></li>
+        The source code is released <a href='https://github.com/galsrv/blog'>here</a>.
+        <li></li>
+        </ul>
+        </p>
+        <h2>Contacts</h2>
+        <p>
+        You can reach me by sending a message using this <a href={% url 'contacts' %}>form</a>.
+        </p>  
+    </div>
+</body>
+</html>

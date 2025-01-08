@@ -1,0 +1,44 @@
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>{{ blog.title }}</title>
+</head>
+<body>
+    {% include 'includes/header.html' %}
+    <div class="container">
+    <h2>{{ blog.title }}</h2>
+    <b>Post date:</b> {{ blog.created|date:"j F Y H:i e" }}<br>
+    <b>Author:</b> <a href={% url 'blogger_page' blog.author.id %}>{{ blog.author.username }}</a><br><br>
+    {{ blog.content }}<br><br>
+    {% if author_flag %}
+        <a href={% url 'blog_edit' blog.id %}>Edit | </a>
+        <a href={% url 'blog_delete' blog.id %}>Delete </a><br><br>
+    {% endif %}
+    <b>Comments:</b> {{ comments|length }}<br>
+    <br>
+        {% for comment in comments %}
+            <li>
+                {{ comment.text }}<br>
+                <a href={% url 'blogger_page' comment.author.id %}>{{ comment.author.username }}</a> - 
+                {{ comment.created|date:"j F Y H:i e" }}<br>
+                {% if comment.comment_author_flag %}
+                    <a href={% url 'comment_delete' comment.id %}>Delete comment</a><br>
+                {% endif %}
+            </li><br>
+        {% empty %}
+            No comments<br><br>
+        {% endfor %}
+        {% if user.is_authenticated %}
+            <form action={% url 'blog_details' blog.id %} method='post' class='form'>
+                {% csrf_token %}
+                {% bootstrap_form comment_form %}
+                {% bootstrap_button button_type="submit" content="Submit" %}
+            </form>
+        {% endif %}
+    </div>
+</body>
+</html>

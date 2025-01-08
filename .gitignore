@@ -1,2 +1,5 @@
 venv/
+logs/
 .env
+
+__pychache__

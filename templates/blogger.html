@@ -1,0 +1,26 @@
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Blogger: {{ blogger.username }}</title>
+</head>
+<body>
+    {% include 'includes/header.html' %}
+    <div class="container">
+    <h2>Blogger: {{ blogger.username }}</h2>
+    <b>Bio:</b> {{ blogger.blogger.bio }}<br><br>
+    {% for blog in blogs %}
+        <li>
+        <a href={% url 'blog_details' blog.id %}>{{ blog.title }}</a><br>
+        {{ blog.created|date:"j F Y H:i e" }} - 
+        Comments: {{ blog.nr_comments }}<br>
+        </li><br>
+    {% empty %}
+        No entries<br><br>
+    {% endfor %}
+    </div>
+</body>
+</html>
