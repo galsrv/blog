@@ -1,10 +1,4 @@
-from os import getenv
-from smtplib import SMTP, SMTPException
-import socket
-from ssl import create_default_context
-
 from django.contrib.auth import logout
-from django.core.mail import EmailMessage, get_connection, send_mail
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
 
@@ -32,9 +26,9 @@ def logout_view(request: HttpRequest, *args, **kwargs):
     logout(request)
     return redirect('index')
 
+
 def contacts(request: HttpRequest, *args, **kwargs):
     form = ContactForm()
-    mail_sent_flag = 0
     
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -44,4 +38,4 @@ def contacts(request: HttpRequest, *args, **kwargs):
             return redirect('index')
 
     return render(request, 'form.html', context={'form': form, 'title': 'Contacts page'})
-    
+

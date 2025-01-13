@@ -12,3 +12,7 @@ class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = ['text', ]
+
+
+class BloggerForm(Form):
+    bio = CharField(max_length=2000, required=False)

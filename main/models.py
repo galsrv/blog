@@ -5,8 +5,8 @@ from django.urls import reverse
 
 
 class Blogger(Model):
-    user = OneToOneField(User, on_delete=CASCADE, related_name='blogger')
-    bio = TextField(max_length=1000)
+    user = OneToOneField(User, unique=True, on_delete=CASCADE, related_name='blogger')
+    bio = TextField(max_length=1000, null=True, blank=True)
 
     def __str__(self):
         return f'Блогер: {self.user.username}'

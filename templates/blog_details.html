@@ -15,7 +15,7 @@
     <b>Author:</b> <a href={% url 'blogger_page' blog.author.id %}>{{ blog.author.username }}</a><br><br>
     {{ blog.content }}<br><br>
     {% if author_flag %}
-        <a href={% url 'blog_edit' blog.id %}>Edit | </a>
+        <a href={% url 'blog_edit' blog.id %}>Edit</a> | 
         <a href={% url 'blog_delete' blog.id %}>Delete </a><br><br>
     {% endif %}
     <b>Comments:</b> {{ comments|length }}<br>
@@ -23,21 +23,28 @@
         {% for comment in comments %}
             <li>
                 {{ comment.text }}<br>
-                <a href={% url 'blogger_page' comment.author.id %}>{{ comment.author.username }}</a> - 
-                {{ comment.created|date:"j F Y H:i e" }}<br>
+                <a href={% url 'blogger_page' comment.author.id %}>{{ comment.author.username }}</a> | 
+                {{ comment.created|date:"j F Y H:i e" }}
                 {% if comment.comment_author_flag %}
-                    <a href={% url 'comment_delete' comment.id %}>Delete comment</a><br>
+                     | <a href={% url 'comment_delete' blog.id comment.id %}>Delete comment</a><br>
                 {% endif %}
             </li><br>
         {% empty %}
             No comments<br><br>
         {% endfor %}
         {% if user.is_authenticated %}
-            <form action={% url 'blog_details' blog.id %} method='post' class='form'>
-                {% csrf_token %}
-                {% bootstrap_form comment_form %}
-                {% bootstrap_button button_type="submit" content="Submit" %}
-            </form>
+            <div class="card col-4 m-3">
+                <div class="card-header">
+                    Add a comment
+                </div>
+                <div class="card-body">
+                    <form action={% url 'comment_create' blog.id %} method='post' class='form'>
+                        {% csrf_token %}
+                        {% bootstrap_form comment_form %}
+                        {% bootstrap_button button_type="submit" content="Submit" %}
+                    </form>
+                </div>
+            </div>
         {% endif %}
     </div>
 </body>

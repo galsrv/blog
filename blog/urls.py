@@ -1,25 +1,20 @@
 from django.contrib import admin
-from django.contrib.auth.views import LoginView
 
-from django.urls import include, path, reverse_lazy
+from django.urls import include, path
 
-from blog.views import contacts, logout_view, signup
+from blog.cb_views import ContactsFormView, LoginUser, LogoutUser, SignupView
 
 
 accounts_patterns = [
-    path('signup', signup, name='signup'),
-    path('login/', LoginView.as_view(
-        template_name='form.html',
-        next_page=reverse_lazy('index'),
-        extra_context={'title': 'Login page'}),
-        name='login'),
-    path('logout/', logout_view, name='logout'),
+    path('signup', SignupView.as_view(), name='signup'),
+    path('login/', LoginUser.as_view(), name='login'),
+    path('logout/', LogoutUser.as_view(), name='logout'),
 ]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include(accounts_patterns)),
-    path('contacts/', contacts, name='contacts'),
+    path('contacts/', ContactsFormView.as_view(), name='contacts'),
     path('', include('main.urls')),
 ]
 

@@ -10,11 +10,18 @@
 <body>
     <div class="container">
     {% include 'includes/header.html' %}
-    <form method="post" class='form'>
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        {% bootstrap_button button_type="submit" content="Submit" %}
-    </form>
-    <div>
+        <div class="card col-4 m-3">
+            <div class="card-header">
+                {{ title }}
+            </div>
+            <div class="card-body">
+                <form method="post" class='form'>
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% bootstrap_button button_type="submit" content="Submit" %}
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
