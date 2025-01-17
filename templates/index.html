@@ -1,15 +1,7 @@
-{% load django_bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Blog site</title>
-</head>
-<body>
-    {% include 'includes/header.html' %}
-    <div class="container">
+{% extends "base.html" %}
+
+{% block content %}
+    <div class='container'>
         <h2>Hi,</h2>
         <p>
         I am Aleksei and this is my pet project.<br>
@@ -45,5 +37,4 @@
         You can reach me by sending a message using this <a href={% url 'contacts' %}>form</a>.
         </p>  
     </div>
-</body>
-</html>
+{% endblock content %}

@@ -1,5 +1,8 @@
 venv/
 logs/
+static/
+media/
+
 .env
 
 __pychache__

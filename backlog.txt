@@ -1,4 +1,8 @@
+- Django - extended course
 - Docker
+- Redis
+
 - CI/CD
 - REST API
 - Dummy data enter
+- templates appearance

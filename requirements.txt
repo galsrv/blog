@@ -2,4 +2,5 @@ django==5.1.4
 psycopg-binary==3.2.3
 django-bootstrap5==24.3
 python-dotenv==1.0.1
-certifi==2024.12.14
+pillow==11.1.0
+django-cleanup==9.0.0

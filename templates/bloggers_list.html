@@ -1,26 +1,20 @@
+{% extends "base.html" %}
+
 {% load django_bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Bloggers list</title>
-</head>
-<body>
-    {% include 'includes/header.html' %}
+
+{% block content %}
     <div class="container">
     <h2>There are {{ bloggers|length }} bloggers on this site:</h2>
-    <ul>
+    <ul class="list-group">
     {% for blogger in bloggers %}
-        <li>
-        <a href={% url 'blogger_page' blogger.id %}>{{ blogger.username }}</a>
-        , entries: {{ blogger.nr_blogs }}
+        <li class="list-group-item">
+            <img src={{ MEDIA_URL }}{{ blogger.avatar }} class="img-fluid rounded-circle" width="30" alt='Avatar'>
+            <a href={% url 'blogger_page' blogger.id %}>{{ blogger.username }}</a>
+            , entries: <span class="badge bg-primary rounded-pill">{{ blogger.nr_blogs }}</span>
         </li>
     {% empty %}
         No entries
     {% endfor %}
     </ul>  
     </div>
-</body>
-</html>
+{% endblock %}

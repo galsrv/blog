@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Case, Count, When
+from django.db.models import Case, Count, F, When
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, UpdateView
 from django.views.generic.base import TemplateView
 
-from main.constants import BLOGS_PER_PAGE
+from main.constants import BLOGS_PER_PAGE, DEFAULT_AVATAR_FILE_NAME
 from main.forms import BloggerForm, CommentForm
 from main.models import Blog, Blogger, Comment
 
@@ -25,21 +25,30 @@ class IndexView(TemplateView):
 class BloggersList(ListView):
     http_method_names = ['get', 'head']
     template_name = 'bloggers_list.html'
-    queryset = User.objects.annotate(nr_blogs=Count('blogs'))
-    ordering = ['-nr_blogs', ]
+    model = User
+    # queryset = User.objects.annotate(nr_blogs=Count('blogs'))
+    #ordering = ['-nr_blogs', ]
     context_object_name = 'bloggers'
+    extra_context = {'default_avatar': DEFAULT_AVATAR_FILE_NAME}
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.annotate(
+            nr_blogs=Count('blogs'),
+            avatar=F('blogger__avatar')).order_by('-nr_blogs')
+        return queryset
 
 
 class BloggerDetailView(DetailView):
     http_method_names = ['get', 'head']
     template_name = 'blogger.html'
-    model = User
+    queryset = User.objects.annotate(avatar=F('blogger__avatar'))
     context_object_name = 'blogger'
     pk_url_kwarg = 'author_id'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['blogs'] = Blog.objects.filter(author=self.object.id).order_by('-created')
+        context['blogs'] = Blog.objects.filter(author=self.object.id).annotate(nr_comments=Count('comments')).order_by('-created')
         context['bio'] = ''
         try:
             blogger_entry = Blogger.objects.get(user=self.object.id)
@@ -53,19 +62,20 @@ class BloggerDetailView(DetailView):
 class BloggerProfileView(LoginRequiredMixin, FormView):
     form_class = BloggerForm
     template_name = 'form.html'
-    extra_context = {'title': 'Edit your bio page'}
+    extra_context = {'title': 'Edit your bio page',}
 
     def get_blogger(self, user):
-        blogger, _ = Blogger.objects.get_or_create(user=user, defaults={'bio': ''})
+        blogger, _ = Blogger.objects.get_or_create(user=user)
         return blogger
 
     def get_initial(self):
         blogger = self.get_blogger(self.request.user)
-        return {'bio': blogger.bio}
+        return {'bio': blogger.bio, 'avatar': blogger.avatar}
 
     def form_valid(self, form: BloggerForm):
         blogger = self.get_blogger(self.request.user) 
         blogger.bio = form.cleaned_data['bio']
+        blogger.avatar = form.cleaned_data['avatar']
         blogger.save()
         return redirect('index')
 
@@ -76,6 +86,17 @@ class BlogsList(ListView):
     model = Blog
     ordering = ['-created', ]
     paginate_by = BLOGS_PER_PAGE
+
+    def get_queryset(self):
+        # "Retrieve everything at once if you know you will need it" (c)
+        # Оптимизация числа запросов к БД
+        queryset = super().get_queryset()
+        from django.db.models import F
+        queryset = queryset.annotate(
+            nr_comments=Count('comments'),
+            author_username=F('author__username'),
+            author_iid=F('author__id'),)
+        return queryset
 
 
 class BlogDetailView(DetailView):
@@ -89,9 +110,13 @@ class BlogDetailView(DetailView):
         context = super().get_context_data(**kwargs)
 
         context['comments'] = Comment.objects.filter(to_blog=self.object).annotate(
+            author_username=F('author__username'),
+            author_iid=F('author__id'),
             comment_author_flag=Case(
                 When(author=self.request.user if self.request.user.is_authenticated else None, then=True),
                 default=False))
+        # Думал избавиться от лишнего запроса к БД, но DetailView записывает в контекст объект модели, а QuerySet
+        # И мой любимый прием с annotate к объекту модели не прикрутишь ((
         context['author_flag'] = self.object.author == self.request.user
         context['comment_form'] = CommentForm()
 
@@ -100,7 +125,7 @@ class BlogDetailView(DetailView):
 
 class BlogCreateView(LoginRequiredMixin, CreateView):
     model = Blog
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'image']
     template_name = 'form.html'
     extra_context = {'title': 'Create new blog entry'}
 
@@ -111,14 +136,12 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
 
 class BlogUpdateView(UpdateView):
     model = Blog
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'image']
     template_name = 'form.html'
     extra_context = {'title': 'Update the blog entry'}
     pk_url_kwarg = 'blog_id'
 
     def dispatch(self, request, *args, **kwargs):
-        # Такой способ проверки на автора объекта казался мне фиговым
-        # Пока я не увидел, что в материалах Яндекс Практикума рекомендуется делать именно так
         # этот метод выполняется на старте, поэтому от LoginRequiredMixin уже никакого эффекта нет
         blog = self.get_object()
         if request.user != blog.author:

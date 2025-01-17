@@ -1,7 +1,7 @@
 import os
 
 from django.contrib.auth import logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
 from django.shortcuts import redirect
@@ -9,21 +9,16 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, FormView
 from dotenv import load_dotenv
 
-from blog.forms import BlogUserCreationForm, ContactForm
+from blog.forms import ContactForm
 from main.models import Blogger
 
 load_dotenv()
 
 class SignupView(CreateView):
-    form_class = BlogUserCreationForm
+    form_class = UserCreationForm
     template_name = 'form.html'
     extra_context = {'title': 'Signup page'}
     success_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        self.object = form.save()
-        Blogger.objects.create(user=self.object, bio=form.cleaned_data['bio'])
-        return super().form_valid(form)
 
 
 class LoginUser(LoginView):

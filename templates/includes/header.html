@@ -4,6 +4,7 @@
         <li class='nav-item'><a class='nav-link link-light' href={% url 'blogs_list' %}>Blogs</a></li>
         <li class='nav-item'><a class='nav-link link-light' href={% url 'bloggers_list' %}>Bloggers</a></li>
         {% if user.is_authenticated %}
+            <li class="nav-item"><img class="rounded-circle" width="30" height="30" src={{ user.blogger.avatar.url }}/></li>
             <li class='nav-item'><label class='nav-link link-light'> User: {{ user.username }}</label></li>
             <li class='nav-item'><a class='nav-link link-light' href={% url 'blogger_page' user.id %}>My blogs</a></li>
             <li class='nav-item'><a class='nav-link link-light' href={% url 'blogger_profile' %}>My profile</a></li>    

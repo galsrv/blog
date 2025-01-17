@@ -1,10 +1,6 @@
-from django.forms import CharField, Form, ModelForm, Textarea
+from django.forms import CharField, FileInput, Form, ImageField, ModelForm
 
 from .models import Comment
-
-class BlogForm(Form):
-    title = CharField(max_length=50)
-    content = CharField(max_length=2000, widget=Textarea)
 
 
 class CommentForm(ModelForm):
@@ -16,3 +12,4 @@ class CommentForm(ModelForm):
 
 class BloggerForm(Form):
     bio = CharField(max_length=2000, required=False)
+    avatar = ImageField(required=False, widget=FileInput)

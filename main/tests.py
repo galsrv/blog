@@ -23,6 +23,8 @@ EDITED_CONTENT_SUFFIX = ' edited'
 COMMENT_TEXT = 'This is a comment'
 BIO = 'blabla'
 BIO_TO_TEST = 'test bio'
+TEST_AVATAR = 'test_avatar.png'
+TEST_IMAGE = 'test_image.png'
 
 
 class TestBlogs(TestCase):
@@ -160,72 +162,66 @@ class TestBlogs(TestCase):
 
     def test_blog_create(self):
         ''' Создание записи. Проверяем, что 
-        1) GET/POST анонима отправляем на страницу логина
-        2) GET ответ 200
-        3) GET рендерится верный шаблон 
-        4) GET определяется верный url 
-        5) GET в контексте есть форма для поста
-        6) POST ответ 200 после редиректа
-        7) POST рендерится верный шаблон
-        8) POST определяется верный url c 
-        9) POST данные в контексте верны
-        10) POST в контексте есть форма для комментария
+        GET/POST анонима редиректим на страницу логина
+        GET ответ 200, верный шаблон, верный url
+        GET в контексте есть форма для поста
+        POST ответ 200 после редиректа, верный шаблон, верный url
+        POST данные в контексте верны
+        POST в контексте есть форма для комментария
+        POST запись содержит ссылку на файл картинки
         '''
         response = self.client.get(reverse('blog_create'), follow=True)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(response.request['PATH_INFO'], '/accounts/login/')
-        self.assertEqual(response.redirect_chain, [('/accounts/login/?next=/blog/create/', HTTPStatus.FOUND)])
+        self.assertRedirects(response, '/accounts/login/?next=/blog/create/', status_code=HTTPStatus.FOUND, target_status_code=HTTPStatus.OK)
 
         response = self.client.post(reverse('blog_create'), {'title': TITLE, 'content': CONTENT}, follow=True)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertIn('form.html', [t.name for t in response.templates])
-        self.assertEqual(response.request['PATH_INFO'], '/accounts/login/')
-        self.assertEqual(response.redirect_chain, [('/accounts/login/?next=/blog/create/', HTTPStatus.FOUND)])
+        self.assertRedirects(response, '/accounts/login/?next=/blog/create/', status_code=HTTPStatus.FOUND, target_status_code=HTTPStatus.OK)
+        self.assertTemplateUsed(response, 'form.html')
 
         self.client.login(username=USERNAME1, password=PASSWORD)
         self.assertTrue(get_user(self.client).is_authenticated)
 
         response = self.client.get(reverse('blog_create'))
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertIn('form.html', [t.name for t in response.templates])
+        self.assertTemplateUsed(response, 'form.html')
         self.assertEqual(response.request['PATH_INFO'], '/blog/create/')
         self.assertIn('form', response.context.keys())
 
-        response = self.client.post(reverse('blog_create'), {'title': TITLE, 'content': CONTENT}, follow=True)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertIn('blog_details.html', [t.name for t in response.templates])
-        blog = Blog.objects.get(title=TITLE)
-        self.assertEqual(response.request['PATH_INFO'], f'/blog/{blog.id}/')
-        self.assertEqual(response.context['blog'].title, blog.title)
-        self.assertIn('comment_form', response.context.keys())
+        with open('media/' + TEST_IMAGE, 'rb') as image_file:
+            response = self.client.post(reverse('blog_create'), {'title': TITLE, 'content': CONTENT, 'image': image_file}, follow=True)
+            blog = Blog.objects.get(title=TITLE)
+
+            self.assertRedirects(response, f'/blog/{blog.id}/', status_code=HTTPStatus.FOUND, target_status_code=HTTPStatus.OK)
+            self.assertTemplateUsed(response, 'blog_details.html')
+            
+            self.assertEqual(response.context['blog'].title, blog.title)
+            self.assertIn('comment_form', response.context.keys())
+            self.assertEqual(blog.image, 'images/' + TEST_IMAGE)
+
+            blog.image.delete()
 
     def test_blog_edit(self):
         ''' Редактирование записи. Проверяем, что 
-        1) GET/POST анонима и неавтора отправляем на страницу поста
-        2) GET автора ответ 200
-        3) GET автора рендерится верный шаблон 
-        4) GET автора определяется верный url 
-        5) GET в контексте есть форма для редактирования поста
-        6) POST автора ответ 200 после редиректа
-        7) POST автора рендерится верный шаблон
-        8) POST автора определяется верный url
-        9) POST автора данные в контексте верны
-        10) данные в БД верны после апдейта 
-        11) POST в контексте есть форма для комментария
+        GET/POST анонима и неавтора редиректим на страницу поста
+        GET автора ответ 200, верный шаблон, верный url
+        GET в контексте есть форма для редактирования поста
+        POST автора ответ 200 после редиректа, верный шаблон, верный url
+        POST автора данные в контексте верны
+        POST данные в БД верны после апдейта 
+        POST в контексте есть форма для комментария
+        POST запись содержит ссылку на файл картинки
         '''
         blog = Blog(title=TITLE, content=CONTENT, author=self.user1)
         blog.save()
 
         for _ in range(2):
             response = self.client.get(reverse('blog_edit', kwargs={'blog_id': blog.id}), follow=True)
-            self.assertEqual(response.status_code, HTTPStatus.OK)
-            self.assertIn('blog_details.html', [t.name for t in response.templates])
-            self.assertEqual(response.request['PATH_INFO'], f'/blog/{blog.id}/')
+            self.assertRedirects(response, f'/blog/{blog.id}/', status_code=HTTPStatus.FOUND, target_status_code=HTTPStatus.OK)
+            self.assertTemplateUsed(response, 'blog_details.html')
 
             response = self.client.post(reverse('blog_edit', kwargs={'blog_id': blog.id}), {'title': TITLE + EDITED_TITLE_SUFFIX, 'content': CONTENT + EDITED_CONTENT_SUFFIX}, follow=True)
-            self.assertEqual(response.status_code, HTTPStatus.OK)
-            self.assertIn('blog_details.html', [t.name for t in response.templates])
-            self.assertEqual(response.request['PATH_INFO'], f'/blog/{blog.id}/')
+            self.assertRedirects(response, f'/blog/{blog.id}/', status_code=HTTPStatus.FOUND, target_status_code=HTTPStatus.OK)
+            self.assertTemplateUsed(response, 'blog_details.html')
+
             self.assertEqual(blog.title, TITLE)
             self.assertEqual(blog.content, CONTENT)
 
@@ -239,26 +235,29 @@ class TestBlogs(TestCase):
 
         response = self.client.get(reverse('blog_edit', kwargs={'blog_id': blog.id}))
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertIn('form.html', [t.name for t in response.templates])
         self.assertEqual(response.request['PATH_INFO'], f'/blog/{blog.id}/edit/')
+        self.assertTemplateUsed(response, 'form.html')
         self.assertIn('form', response.context.keys())
 
-        response = self.client.post(reverse('blog_edit', kwargs={'blog_id': blog.id}), {'title': TITLE + EDITED_TITLE_SUFFIX, 'content': CONTENT + EDITED_CONTENT_SUFFIX}, follow=True)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertIn('blog_details.html', [t.name for t in response.templates])
-        self.assertEqual(response.request['PATH_INFO'], f'/blog/{blog.id}/')
-        self.assertEqual(response.context['blog'].title, TITLE + EDITED_TITLE_SUFFIX)
-        blog.refresh_from_db()
-        self.assertEqual(blog.title, TITLE + EDITED_TITLE_SUFFIX)
-        self.assertIn('comment_form', response.context.keys())
+        with open('media/' + TEST_IMAGE, 'rb') as image_file:
+            response = self.client.post(reverse('blog_edit', kwargs={'blog_id': blog.id}), {'title': TITLE + EDITED_TITLE_SUFFIX, 'content': CONTENT + EDITED_CONTENT_SUFFIX, 'image': image_file}, follow=True)
+            self.assertRedirects(response, f'/blog/{blog.id}/', status_code=HTTPStatus.FOUND, target_status_code=HTTPStatus.OK)
+            self.assertTemplateUsed(response, 'blog_details.html')
+
+            self.assertEqual(response.context['blog'].title, TITLE + EDITED_TITLE_SUFFIX)
+            blog.refresh_from_db()
+            self.assertEqual(blog.title, TITLE + EDITED_TITLE_SUFFIX)
+            self.assertIn('comment_form', response.context.keys())
+            self.assertEqual(blog.image, 'images/' + TEST_IMAGE)
+
+            blog.image.delete()
 
     def test_blog_delete(self):
         ''' Удаление записи. Проверяем, что 
-        1) GET анонима и неавтора отправляем на страницу поста
-        2) GET автора ответ 200
-        3) GET автора рендерится верный шаблон 
-        4) GET автора определяется верный url 
-        5) GET блог отсутствует в БД, то есть удален
+        GET анонима и неавтора редиректим на страницу поста
+        GET автора ответ 200, верный шаблон, верный url
+        POST автора ответ 200, верный шаблон, верный url
+        POST блог отсутствует в БД, то есть удален
         '''
 
         blog = Blog(title=TITLE, content=CONTENT, author=self.user1)
@@ -266,9 +265,9 @@ class TestBlogs(TestCase):
 
         for _ in range(2):
             response = self.client.get(reverse('blog_delete', kwargs={'blog_id': blog.id}), follow=True)
-            self.assertEqual(response.status_code, HTTPStatus.OK)
-            self.assertIn('blog_details.html', [t.name for t in response.templates])
-            self.assertEqual(response.request['PATH_INFO'], f'/blog/{blog.id}/')
+            self.assertRedirects(response, f'/blog/{blog.id}/', status_code=HTTPStatus.FOUND, target_status_code=HTTPStatus.OK)
+            self.assertTemplateUsed(response, 'blog_details.html')
+
             self.assertTrue(Blog.objects.filter(title=TITLE).exists())
 
             self.client.login(username=USERNAME2, password=PASSWORD)
@@ -281,14 +280,14 @@ class TestBlogs(TestCase):
 
         response = self.client.get(reverse('blog_delete', kwargs={'blog_id': blog.id}), follow=True)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertIn('form.html', [t.name for t in response.templates])
         self.assertEqual(response.request['PATH_INFO'], f'/blog/{blog.id}/delete/')
+        self.assertTemplateUsed(response, 'form.html')
         self.assertTrue(Blog.objects.filter(title=TITLE).exists())
 
         response = self.client.post(reverse('blog_delete', kwargs={'blog_id': blog.id}), follow=True)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertIn('blogs_list.html', [t.name for t in response.templates])
-        self.assertEqual(response.request['PATH_INFO'], '/blogs/')
+        self.assertRedirects(response, '/blogs/', status_code=HTTPStatus.FOUND, target_status_code=HTTPStatus.OK)
+        self.assertTemplateUsed(response, 'blogs_list.html')
+
         self.assertFalse(Blog.objects.filter(title=TITLE).exists())
 
     def test_comment_create(self):
@@ -416,7 +415,7 @@ class TestBlogs(TestCase):
         6) POST ответ 200 после редиректа
         7) POST рендерится верный шаблон
         8) POST определяется верный url
-        10) данные в БД верны после апдейта 
+        10) данные в БД верны после апдейта, в том числе есть ссылка на аватар
         '''      
         self.assertFalse(get_user(self.client).is_authenticated)   
 
@@ -442,13 +441,18 @@ class TestBlogs(TestCase):
         self.assertIn('form.html', [t.name for t in response.templates])
         self.assertEqual(response.request['PATH_INFO'], '/blogger/profile/')
         self.assertIn('form', response.context.keys())
+        
+        with open('media/' + TEST_AVATAR, 'rb') as image_file:
+            response = self.client.post(reverse('blogger_profile'), {'bio': BIO_TO_TEST, 'avatar': image_file}, follow=True)
+            self.assertEqual(response.status_code, HTTPStatus.OK)
+            self.assertIn('index.html', [t.name for t in response.templates])
+            self.assertEqual(response.request['PATH_INFO'], '/')
+            user.refresh_from_db()
+            self.assertEqual(user.blogger.bio, BIO_TO_TEST)
+            self.assertEqual(user.blogger.avatar, 'avatars/' + TEST_AVATAR)
 
-        response = self.client.post(reverse('blogger_profile'), {'bio': BIO_TO_TEST}, follow=True)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertIn('index.html', [t.name for t in response.templates])
-        self.assertEqual(response.request['PATH_INFO'], '/')
-        user.refresh_from_db()
-        self.assertEqual(user.blogger.bio, BIO_TO_TEST)
+            blogger = user.blogger
+            blogger.avatar.delete()
 
     def test_contacts(self):
         ''' Форма контакта. Проверяем, что 

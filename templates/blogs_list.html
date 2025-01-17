@@ -1,29 +1,23 @@
+{% extends "base.html" %}
+
 {% load django_bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>My Blog site</title>
-</head>
-<body>
-    {% include 'includes/header.html' %}
+
+{% block content %}
     <div class="container">
-    <h2>There are {{ page_obj.paginator.count }} entries on this site:</h2>
-    <ul>
+    <h2>There are {{ paginator.count }} entries on this site:</h2>
+    <ul class="list-group">
     {% for blog in page_obj %}
-        <li>
-        <a href={% url 'blog_details' blog.id %}>{{ blog.title }}</a> 
-        ({{ blog.created|date:"j F Y H:i e" }}) - 
-        <a href={% url 'blogger_page' blog.author.id %}>{{ blog.author.username }}</a> - 
-        Comments: {{ blog.nr_comments }}<br>
+        <li class="list-group-item">
+            <img src={{ MEDIA_URL }}{{ blog.image }} class="float-start" height="50" alt='Image'>
+            <a href={% url 'blog_details' blog.id %}>{{ blog.title }}</a> 
+            <i>- posted {{ blog.created|date:"j F Y H:i e" }} by 
+            <a href={% url 'blogger_page' blog.author_iid %}>{{ blog.author_username }}</a> - </i>
+            Comments:  <span class="badge bg-primary rounded-pill">{{ blog.nr_comments }}</span>
         </li>
     {% empty %}
         No entries
     {% endfor %}
-    </ul>
+    </ul><br>
     {% bootstrap_pagination page_obj url='' size='md' %}
     </div>
-</body>
-</html>
+{% endblock %}

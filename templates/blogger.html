@@ -1,26 +1,23 @@
+{% extends "base.html" %}
+
 {% load django_bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Blogger: {{ blogger.username }}</title>
-</head>
-<body>
-    {% include 'includes/header.html' %}
+
+{% block content %}
     <div class="container">
+    <img src={{ MEDIA_URL }}{{ blogger.avatar }} class="float-start" height="50" alt='Avatar'>
     <h2>Blogger: {{ blogger.username }}</h2>
     <b>Bio:</b> {{ bio }}<br><br>
+    <ul class="list-group">
     {% for blog in blogs %}
-        <li>
+        <li class="list-group-item">
+        <img src={{ MEDIA_URL }}{{ blog.image }} class="float-start" height="50" alt='Image'>
         <a href={% url 'blog_details' blog.id %}>{{ blog.title }}</a><br>
-        {{ blog.created|date:"j F Y H:i e" }} - 
-        Comments: {{ blog.nr_comments }}<br>
-        </li><br>
+        <i>{{ blog.created|date:"j F Y H:i e" }}</i> - 
+        Comments: <span class="badge bg-primary rounded-pill">{{ blog.nr_comments }}</span><br>
+        </li>
     {% empty %}
         No entries<br><br>
     {% endfor %}
+    </ul>
     </div>
-</body>
-</html>
+{% endblock %}
