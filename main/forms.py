@@ -13,3 +13,7 @@ class CommentForm(ModelForm):
 class BloggerForm(Form):
     bio = CharField(max_length=2000, required=False)
     avatar = ImageField(required=False, widget=FileInput)
+
+
+class BioForm(Form):
+    bio = CharField(max_length=2000, required=True)

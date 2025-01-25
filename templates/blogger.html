@@ -6,7 +6,7 @@
     <div class="container">
     <img src={{ MEDIA_URL }}{{ blogger.avatar }} class="float-start" height="50" alt='Avatar'>
     <h2>Blogger: {{ blogger.username }}</h2>
-    <b>Bio:</b> {{ bio }}<br><br>
+    {% include 'includes/htmx_bio.html' %} 
     <ul class="list-group">
     {% for blog in blogs %}
         <li class="list-group-item">

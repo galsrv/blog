@@ -4,20 +4,31 @@
 
 {% block content %}
     <div class="container">
-    <h2>There are {{ paginator.count }} entries on this site:</h2>
-    <ul class="list-group">
-    {% for blog in page_obj %}
-        <li class="list-group-item">
-            <img src={{ MEDIA_URL }}{{ blog.image }} class="float-start" height="50" alt='Image'>
-            <a href={% url 'blog_details' blog.id %}>{{ blog.title }}</a> 
-            <i>- posted {{ blog.created|date:"j F Y H:i e" }} by 
-            <a href={% url 'blogger_page' blog.author_iid %}>{{ blog.author_username }}</a> - </i>
-            Comments:  <span class="badge bg-primary rounded-pill">{{ blog.nr_comments }}</span>
-        </li>
-    {% empty %}
-        No entries
-    {% endfor %}
-    </ul><br>
+    <h2>There are {{ paginator.count }} entries on this site</h2>
+    <table class="table table-bordered table-sm mt-5">
+        <thead>
+        <tr class='table-active'>
+            <th scope="col" style="width: 10%" class="text-center"><small>Cover</small></th>
+            <th scope="col" style="width: 32%"><small>Title</small></th>
+            <th scope="col" style="width: 20%"><small>Creation date</small></th>
+            <th scope="col" style="width: 11%"><small>Author</small></th>
+            <th scope="col" style="width: 11%"><small>Comments</small></th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for blog in page_obj %}
+                <tr> 
+                    <td class="align-middle ps-2"><img src={{ MEDIA_URL }}{{ blog.image }} class="float-start" height="50" alt='Image'></td>
+                    <td class="align-middle ps-2"><a href={% url 'blog_details' blog.id %}>{{ blog.title }}</a></td>
+                    <td class="align-middle ps-2">{{ blog.created|date:"j F Y H:i e" }}</td>
+                    <td class="align-middle ps-2"><a href={% url 'blogger_page' blog.author_iid %}>{{ blog.author_username }}</a></td>   
+                    <td class="align-middle ps-2">{{ blog.nr_comments }}</td> 
+                </tr>    
+            {% empty %}
+                No entries
+            {% endfor %}
+        </tbody>
+    </table> 
     {% bootstrap_pagination page_obj url='' size='md' %}
     </div>
 {% endblock %}

@@ -10,9 +10,10 @@
     {% bootstrap_messages %}
     <link type='image/png' src={% static "favicon.ico" %}>
 </head>
-<body>
+<body class='text-bg-light' hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% include 'includes/header.html' %}
     {% block content %}Content{% endblock %}
-</body>
     {% include 'includes/footer.html' %}
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+</body>
 </html>

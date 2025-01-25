@@ -1,7 +1,7 @@
-- Django - extended course
 - Docker
 - Redis
 
+- write a readme file
 - CI/CD
 - REST API
 - Dummy data enter

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .cb_views import BlogCreateView, BlogDeleteView, BlogDetailView, BlogUpdateView, BloggerDetailView, BloggerProfileView, BloggersList, BlogsList, CommentCreateView, CommentDeleteView, IndexView
+from .cb_views import BioUpdateView, BlogCreateView, BlogDeleteView, BlogDetailView, BlogUpdateView, BloggerDetailView, BloggerProfileView, BloggersList, BlogsList, CommentCreateView, CommentDeleteView, IndexView
 
 
 urlpatterns = [
@@ -11,8 +11,10 @@ urlpatterns = [
     path('blog/<int:blog_id>/delete/', BlogDeleteView.as_view(), name='blog_delete'),
     path('blog/<int:blog_id>/comment/create/', CommentCreateView.as_view(), name='comment_create'),
     path('blog/<int:blog_id>/comment/<int:comment_id>/delete/', CommentDeleteView.as_view(), name='comment_delete'),
+    path('bloggers/htmx/', BloggersList.as_view(), name='htmx_bloggers_list'),
     path('bloggers/', BloggersList.as_view(), name='bloggers_list'),
     path('blogger/profile/', BloggerProfileView.as_view(), name='blogger_profile'),
+    path('blogger/<int:author_id>/htmx/', BioUpdateView.as_view(), name='htmx_bio'),
     path('blogger/<int:author_id>/', BloggerDetailView.as_view(), name='blogger_page'),
     path('', IndexView.as_view(), name='index'),
 ] 

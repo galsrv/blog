@@ -130,8 +130,8 @@ class TestBlogs(TestCase):
             self.assertEqual(response.status_code, HTTPStatus.OK)
             self.assertIn('blogs_list.html', [t.name for t in response.templates])
             self.assertEqual(response.request['PATH_INFO'], '/blogs/')
-            self.assertEqual(len(response.context['page_obj']), 5)
-            self.assertEqual(response.context['num_pages'], 20)
+            self.assertEqual(len(response.context['page_obj']), 10)
+            self.assertEqual(response.context['num_pages'], 10)
 
             self.client.login(username=USERNAME1, password=PASSWORD)
             self.assertTrue(get_user(self.client).is_authenticated)
@@ -363,21 +363,35 @@ class TestBlogs(TestCase):
 
     def test_bloggers_list(self):
         ''' Список блоггеров. Проверяем, что 
-        1) возвращается верный статус страницы
-        2) используется верный шаблон страницы 
-        3) определяется верный url 
-        4) в контексте есть нужная переменная 
+        - верный статус ответа, верный шаблон, верный url
+        - в контексте есть нужная переменная 
         Сначала от имени анонима, потом от имени залогиненого юзера
         '''
         self.assertFalse(get_user(self.client).is_authenticated)
 
         for _ in range(2):
             response = self.client.get(reverse('bloggers_list'))
+            self.assertTemplateUsed(response, 'bloggers_list.html')
             self.assertEqual(response.status_code, HTTPStatus.OK)
-            self.assertIn('bloggers_list.html', [t.name for t in response.templates])
             self.assertEqual(response.request['PATH_INFO'], '/bloggers/')
             self.assertIn('bloggers', response.context.keys())
 
+            self.client.login(username=USERNAME1, password=PASSWORD)
+            self.assertTrue(get_user(self.client).is_authenticated)
+
+    def test_bloggers_list_update_htmx(self):
+        ''' Обновление списка блогеров кнопкой. Проверяем, что 
+        - верный статус ответа, верный шаблон, верный url
+        - в контексте есть нужная переменная 
+        Сначала от имени анонима, потом от имени залогиненого юзера
+        '''
+        for _ in range(2):
+            response = self.client.get(reverse('htmx_bloggers_list'))
+            self.assertTemplateUsed(response, 'includes/htmx_bloggers_list.html')
+            self.assertEqual(response.status_code, HTTPStatus.OK)
+            self.assertEqual(response.request['PATH_INFO'], '/bloggers/htmx/')
+            # почему-то в данном случае структура response.context иная
+            self.assertIn('bloggers', response.context.flatten().keys())
             self.client.login(username=USERNAME1, password=PASSWORD)
             self.assertTrue(get_user(self.client).is_authenticated)
 

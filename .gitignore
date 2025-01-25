@@ -4,5 +4,7 @@ static/
 media/
 
 .env
+backlog.txt
 
 __pychache__
+.vscode/

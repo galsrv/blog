@@ -1,2 +1,2 @@
-BLOGS_PER_PAGE = 5
+BLOGS_PER_PAGE = 10
 DEFAULT_AVATAR_FILE_NAME = 'default_avatar.jpg'

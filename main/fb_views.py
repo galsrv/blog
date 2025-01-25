@@ -120,4 +120,3 @@ def comment_delete(request: HttpRequest, comment_id: int, *args, **kwargs):
 
 
 
-

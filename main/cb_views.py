@@ -3,11 +3,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Case, Count, F, When
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, UpdateView
+from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, View, UpdateView
 from django.views.generic.base import TemplateView
 
-from main.constants import BLOGS_PER_PAGE, DEFAULT_AVATAR_FILE_NAME
-from main.forms import BloggerForm, CommentForm
+from main.constants import BLOGS_PER_PAGE
+from main.forms import BioForm, BloggerForm, CommentForm
 from main.models import Blog, Blogger, Comment
 
 
@@ -26,10 +26,7 @@ class BloggersList(ListView):
     http_method_names = ['get', 'head']
     template_name = 'bloggers_list.html'
     model = User
-    # queryset = User.objects.annotate(nr_blogs=Count('blogs'))
-    #ordering = ['-nr_blogs', ]
     context_object_name = 'bloggers'
-    extra_context = {'default_avatar': DEFAULT_AVATAR_FILE_NAME}
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -37,6 +34,12 @@ class BloggersList(ListView):
             nr_blogs=Count('blogs'),
             avatar=F('blogger__avatar')).order_by('-nr_blogs')
         return queryset
+
+    def get_template_names(self):
+        # В случае HTMX те же данные нужно отправить в другой шаблон
+        if self.request.path == '/bloggers/htmx/':
+            return 'includes/htmx_bloggers_list.html'
+        return super().get_template_names()
 
 
 class BloggerDetailView(DetailView):
@@ -50,13 +53,40 @@ class BloggerDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['blogs'] = Blog.objects.filter(author=self.object.id).annotate(nr_comments=Count('comments')).order_by('-created')
         context['bio'] = ''
+        context['author_id'] = self.object.id
         try:
             blogger_entry = Blogger.objects.get(user=self.object.id)
             context['bio'] = blogger_entry.bio
         except Blogger.DoesNotExist:
             context['bio'] = 'The user didn\'t provide any bio' 
+        context['update_bio_flag'] = self.request.user.id == self.object.id
 
         return context
+
+
+class BioUpdateView(View):
+
+    def get(self, request, *args, **kwargs):
+        author_id = self.kwargs['author_id']
+        blogger = get_object_or_404(Blogger, user=author_id)
+        form = BioForm(initial={'bio': blogger.bio})
+        return render(request, 'includes/htmx_bio_form.html', context={'form': form, 'author_id': author_id})       
+
+    def post(self, request, *args, **kwargs):
+        author_id = self.kwargs['author_id']
+        context = {
+            'update_bio_flag': request.user.id == author_id,
+            'author_id': author_id,
+            'bio': ''
+        }
+        form = BioForm(request.POST)
+        if form.is_valid():
+            blogger = get_object_or_404(Blogger, user=author_id)
+            blogger.bio = form.cleaned_data['bio']
+            if context['update_bio_flag']:
+                blogger.save()
+            context['bio'] = blogger.bio
+        return render(request, 'includes/htmx_bio.html', context)        
 
 
 class BloggerProfileView(LoginRequiredMixin, FormView):

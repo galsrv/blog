@@ -1,0 +1,19 @@
+{% load django_bootstrap5 %}
+
+<div id='bio'>
+    <br>
+    <form method="post" class='form' enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="button"
+            class="btn btn-primary"
+            hx-post="{% url 'htmx_bio' author_id %}"
+            hx-target="#bio"
+            hx-swap="outerHTML" >
+            Submit
+        </button>
+    </form>
+    <br><br>
+</div>
+
+

@@ -1,0 +1,14 @@
+<div id='bio'>
+<label><b>Bio: </b>{{ bio }}</label>
+<br><br>
+{% if update_bio_flag %}
+    <button 
+        class="btn btn-secondary"
+        hx-get="{% url 'htmx_bio' author_id %}"
+        hx-target="#bio"
+        hx-swap="outerHTML">
+        Update bio
+    </button>
+    <br><br>
+{% endif %}
+</div>
