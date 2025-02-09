@@ -6,5 +6,7 @@ media/
 .env
 backlog.txt
 
-__pychache__
+config/__pychache__
+main/__pychache__
+.pyc
 .vscode/

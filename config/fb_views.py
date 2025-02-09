@@ -2,7 +2,7 @@ from django.contrib.auth import logout
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
 
-from blog.forms import BlogUserCreationForm, ContactForm
+from config.forms import BlogUserCreationForm, ContactForm
 from main.models import Blogger
 
 

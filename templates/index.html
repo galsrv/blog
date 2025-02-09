@@ -6,7 +6,7 @@
         <p>
         I am Aleksei and this is my pet project.<br>
         Originally, I was going to get some practice after finishing a few study cources on programming.<br>
-        But, after all, I deciced to stay this modest resorce online and present it as my CV.<br>
+        But, after all, I deciced to keep tay this modest resorce online and present it as an addition to my CV.<br>
         My contacts are below the page.
         </p><p>
         Features:
@@ -19,12 +19,13 @@
         Stack and technologies:
         <ul>
         <li><b>Django</b></li>
+        The project is based on Python 3.12 and Django 5.1.<br>
         The standard set of MTV - Models, Templates, Views - is used.<br>
         The views have been initially created as functions and then rebuilt as classes.<br>
         The tests are based on django.test library<br>
         There is quite basic logging-to-file set up.
         <li><b>PostgreSQL</b></li>
-        Nothing to add here, actually.
+        Default DB setup is applied.
         <li><b>Bootstrap</b></li>
         As you can notice, Bootstrap styles are applied. The frontend appearance wasn't the goal of the project, but anyway.
         <li><b>HTMX</b></li>
@@ -37,7 +38,7 @@
         </p>
         <h2>Contacts</h2>
         <p>
-        You can reach me by sending a message using this <a href={% url 'contacts' %}>form</a>.
+        You can reach me by sending a message using this <a href={% url 'contacts' %}>form</a>. It makes sense to include your contacts in the message.
         </p>  
     </div>
 {% endblock content %}

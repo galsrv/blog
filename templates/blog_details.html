@@ -4,17 +4,17 @@
 
 {% block content %}
     <div class="container">
-    <h2>{{ blog.title }}</h2>
-    <b>Post date:</b> {{ blog.created|date:"j F Y H:i e" }}<br>
-    <b>Author:</b> <a href={% url 'blogger_page' blog.author.id %}>{{ blog.author.username }}</a><br><br>
-    <img src={{ MEDIA_URL }}{{ blog.image }} class="mx-auto d-block" height="300" alt='Image'>
-    {{ blog.content }}<br><br>
-    {% if author_flag %}
-        <a href={% url 'blog_edit' blog.id %}>Edit</a> | 
-        <a href={% url 'blog_delete' blog.id %}>Delete </a><br><br>
-    {% endif %}
-    <b>Comments:</b> {{ comments|length }}<br>
-    <br>
+        <h2>{{ blog.title }}</h2>
+        <b>Post date:</b> {{ blog.created|date:"j F Y H:i e" }}<br>
+        <b>Author:</b> <a href={% url 'blogger_page' blog.author.id %}>{{ blog.author.username }}</a><br><br>
+        <img src={{ MEDIA_URL }}{{ blog.image }} class="img-fluid" height="300" alt='Image'><br><br>
+        {{ blog.content|safe }}<br><br>
+        {% if author_flag %}
+            <a href={% url 'blog_edit' blog.id %}>Edit</a> | 
+            <a href={% url 'blog_delete' blog.id %}>Delete </a><br><br>
+        {% endif %}
+        <b>Comments:</b> {{ comments|length }}<br>
+        <br>
         <ul class="list-group">
         {% for comment in comments %}
             <li class="list-group-item">

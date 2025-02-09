@@ -1,0 +1,7 @@
+venv/
+logs/
+
+backlog.txt
+
+__pychache__
+.vscode/

@@ -4,7 +4,7 @@ from django.urls import include, path
 from debug_toolbar.toolbar import debug_toolbar_urls
 
 from .settings import DEBUG, MEDIA_ROOT, MEDIA_URL
-from blog.cb_views import ContactsFormView, LoginUser, LogoutUser, SignupView
+from config.cb_views import ContactsFormView, LoginUser, LogoutUser, SignupView
 
 
 accounts_patterns = [

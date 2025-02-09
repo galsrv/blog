@@ -4,13 +4,16 @@
 
 {% block content %}
     <div class="container">
-    <img src={{ MEDIA_URL }}{{ blogger.avatar }} class="float-start" height="50" alt='Avatar'>
-    <h2>Blogger: {{ blogger.username }}</h2>
+    <table class="table-light table-borderless table-sm mt-5">
+        <tr>
+            <td><img src={{ MEDIA_URL }}{{ blogger.avatar }} class="float-start" height="50" alt='Avatar'></td>
+            <td><h2>Blogger: {{ blogger.username }}</h2></td>
+        </tr>
+    </table>
     {% include 'includes/htmx_bio.html' %} 
     <ul class="list-group">
     {% for blog in blogs %}
         <li class="list-group-item">
-        <img src={{ MEDIA_URL }}{{ blog.image }} class="float-start" height="50" alt='Image'>
         <a href={% url 'blog_details' blog.id %}>{{ blog.title }}</a><br>
         <i>{{ blog.created|date:"j F Y H:i e" }}</i> - 
         Comments: <span class="badge bg-primary rounded-pill">{{ blog.nr_comments }}</span><br>

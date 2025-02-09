@@ -8,7 +8,7 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     {% bootstrap_messages %}
-    <link type='image/png' src={% static "favicon.ico" %}>
+    <link rel="shortcut icon" type="image/png" href={% static 'favicon.ico' %}/>
 </head>
 <body class='text-bg-light' hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% include 'includes/header.html' %}

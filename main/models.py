@@ -6,7 +6,7 @@ from django.urls import reverse
 class Blogger(Model):
     user = OneToOneField(User, unique=True, on_delete=CASCADE, related_name='blogger')
     bio = TextField(max_length=1000, null=True, blank=True)
-    avatar = ImageField(upload_to='avatars/', null=False, blank=False, default='default_avatar.jpg')
+    avatar = ImageField(upload_to='avatars/', null=False, blank=False, default='default_avatar.png')
 
     def __str__(self):
         return f'Блогер: {self.user.username}'
@@ -17,7 +17,7 @@ class Blogger(Model):
 
 class Blog(Model):
     title = CharField(max_length=50)
-    content = TextField(max_length=2000)
+    content = TextField(max_length=20000)
     created = DateTimeField(auto_now_add=True)
     author = ForeignKey(to=User, on_delete=CASCADE, related_name='blogs')
     image = ImageField(upload_to='images/', null=False, blank=False, default='default_image.png')

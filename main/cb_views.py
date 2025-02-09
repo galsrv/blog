@@ -6,9 +6,9 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, View, UpdateView
 from django.views.generic.base import TemplateView
 
-from main.constants import BLOGS_PER_PAGE
-from main.forms import BioForm, BloggerForm, CommentForm
-from main.models import Blog, Blogger, Comment
+from .constants import BLOGS_PER_PAGE
+from .forms import BioForm, BloggerForm, CommentForm
+from .models import Blog, Blogger, Comment
 
 
 User = get_user_model()
@@ -95,7 +95,7 @@ class BloggerProfileView(LoginRequiredMixin, FormView):
     extra_context = {'title': 'Edit your bio page',}
 
     def get_blogger(self, user):
-        blogger, _ = Blogger.objects.get_or_create(user=user)
+        blogger = Blogger.objects.get(user=user)
         return blogger
 
     def get_initial(self):
