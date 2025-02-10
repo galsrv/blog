@@ -1,6 +1,8 @@
-FROM python:3.12
+FROM python:3.12-slim
 
 WORKDIR /blog_app
+
+RUN python -m pip install --upgrade pip
 
 RUN pip install gunicorn==23.0.0
 
