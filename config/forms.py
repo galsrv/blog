@@ -1,9 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.forms import CharField, Form
-
-
-# class BlogUserCreationForm(UserCreationForm):
-#     bio = CharField(max_length=200, label='Enter some of your bio facts')
 
 
 class ContactForm(Form):

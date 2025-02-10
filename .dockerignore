@@ -5,3 +5,5 @@ backlog.txt
 
 __pychache__
 .vscode/
+
+Dockerfile_*

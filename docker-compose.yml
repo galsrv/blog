@@ -1,0 +1,18 @@
+name: blog_project
+
+volumes:
+  db_blog_data:
+
+services:
+
+  db_blog:
+    image: postgres:17
+    env_file: .env
+    volumes:
+      - db_blog_data:/var/lib/postgresql/data
+
+  backend_blog:
+    build: .
+    env_file: .env
+    depends_on:
+      - db_blog

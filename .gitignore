@@ -10,3 +10,5 @@ config/__pychache__
 main/__pychache__
 .pyc
 .vscode/
+
+Dockerfile_*

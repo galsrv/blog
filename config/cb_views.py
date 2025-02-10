@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, FormView
 from dotenv import load_dotenv
 
-from config.forms import ContactForm
+from .forms import ContactForm
 from main.models import Blogger
 
 load_dotenv()
