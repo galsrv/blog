@@ -6,4 +6,4 @@ backlog.txt
 __pychache__
 .vscode/
 
-Dockerfile_*
+Dockerfile_runserver
