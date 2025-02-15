@@ -7,7 +7,7 @@
         <div class="col"><a class='nav-link link-light' href={% url 'bloggers_list' %}>Bloggers</a></div>
         
             {% if user.is_authenticated %}
-                <div class="col"><img class="rounded-circle" width="30" height="30" src={{ user.blogger.avatar.url }}/></div>
+                <div class="col"><img class="rounded-circle" width="30" height="30" src={{ user.blogger.avatar.url }}></div>
                 <div class="col"><a class='nav-link link-light' href={% url 'blogger_page' user.id %}>{{ user.username }}</a></div>
                 <div class="col"><a class='nav-link link-light' href={% url 'blogger_profile' %}>My profile</a></div>  
                 <div class="col"><a class='nav-link link-light' href={% url 'blog_create' %}>Create new blog</a></div>

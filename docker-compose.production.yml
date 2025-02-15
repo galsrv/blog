@@ -3,6 +3,7 @@ name: blog_project
 volumes:
   db_blog_data:
   media:
+  static:
 
 services:
 
@@ -13,14 +14,18 @@ services:
       - db_blog_data:/var/lib/postgresql/data
 
   blog_backend:
-    build: ./backend/
+    image: galsrv/blog_backend
     env_file: .env
-    depends_on:
-      - blog_db
     volumes:
       - media:/blog_app/media
+      - static:/blog_app/collectedstatic
+    depends_on:
+      - blog_db
 
   blog_gateway:
-    build: ./gateway/
+    image: galsrv/blog_gateway
+    volumes:
+      - media:/media
+      - static:/static
     ports:
       - 8000:80 

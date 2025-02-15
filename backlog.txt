@@ -1,8 +1,8 @@
-- static file organization
-- Docker
+- deploy on VM
 
 
 - write a readme file
+- collect and deploy static files
 - REST API
 - CI/CD
 

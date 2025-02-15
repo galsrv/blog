@@ -1,6 +1,7 @@
 venv/
 logs/
 static/
+collectedstatic/
 media/
 
 .env

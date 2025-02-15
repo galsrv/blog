@@ -20,7 +20,7 @@ class Blog(Model):
     content = TextField(max_length=20000)
     created = DateTimeField(auto_now_add=True)
     author = ForeignKey(to=User, on_delete=CASCADE, related_name='blogs')
-    image = ImageField(upload_to='images/', null=False, blank=False, default='default_image.png')
+    image = ImageField(upload_to='images/', null=False, blank=False, default='default_image.jpg')
 
     class Meta:
         ordering = ['-created', ]
