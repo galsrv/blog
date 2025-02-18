@@ -13,6 +13,8 @@ DEBUG = os.getenv('DEBUG', False) == 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1 ').split()
 
+CSRF_TRUSTED_ORIGINS = [os.getenv('TRUSTED_ORIGINS', ''), ]
+
 INTERNAL_IPS = ['127.0.0.1', ]
 
 INSTALLED_APPS = [
