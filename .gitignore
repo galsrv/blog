@@ -5,7 +5,6 @@ collectedstatic/
 media/
 
 .env
-backlog.txt
 
 config/__pychache__
 main/__pychache__

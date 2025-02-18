@@ -1,8 +1,0 @@
-- deploy on VM
-
-
-- write a readme file
-- REST API
-- CI/CD
-
-

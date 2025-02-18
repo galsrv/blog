@@ -1,4 +1,4 @@
-name: blog_project
+name: blog_project_build
 
 volumes:
   db_blog_data:
