@@ -11,33 +11,29 @@
 			"item": [
 				{
 					"name": "User Create",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "username",
-									"value": "new_user1",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "RandomPass1",
-									"type": "text"
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"new_user\",\r\n    \"password\": \"RandomPass1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/auth/users/",
+							"raw": "{{host}}/api/v1/auth/users/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -70,14 +66,10 @@
 							]
 						},
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/auth/token/login/",
+							"raw": "{{host}}/api/v1/auth/token/login/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -94,16 +86,18 @@
 					"name": "User Logout",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/auth/token/logout/",
+							"raw": "{{host}}/api/v1/auth/token/logout/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -127,14 +121,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/blogs/",
+							"raw": "{{host}}/api/v1/blogs/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -149,21 +139,24 @@
 					"name": "Blog Details",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token 97ef37c2edbcdcd7e4cc95afc02f6b1589e602e1",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/blogs/55/",
+							"raw": "{{host}}/api/v1/blogs/{{blog}}/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
 								"blogs",
-								"55",
+								"{{blog}}",
 								""
 							]
 						}
@@ -191,14 +184,10 @@
 							}
 						},
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/blogs/",
+							"raw": "{{host}}/api/v1/blogs/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -216,13 +205,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token 97ef37c2edbcdcd7e4cc95afc02f6b1589e602e1",
+								"value": "Token {{token}}",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"my_title\",\r\n    \"content\": \"my_content\"\r\n}",
+							"raw": "{\r\n    \"title\": \"my_title edited\",\r\n    \"content\": \"my_content edited\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -230,19 +219,15 @@
 							}
 						},
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/blogs/55/",
+							"raw": "{{host}}/api/v1/blogs/{{blog}}/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
 								"blogs",
-								"55",
+								"{{blog}}",
 								""
 							]
 						}
@@ -256,13 +241,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token 97ef37c2edbcdcd7e4cc95afc02f6b1589e602e1",
+								"value": "Token {{token}}",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"my_title_updated\"\r\n}",
+							"raw": "{\r\n    \"title\": \"my_title_updated 2\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -270,19 +255,15 @@
 							}
 						},
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/blogs/55/",
+							"raw": "{{host}}/api/v1/blogs/{{blog}}/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
 								"blogs",
-								"55",
+								"{{blog}}",
 								""
 							]
 						}
@@ -296,24 +277,20 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token e88a581e44276cbc622ba469ff1006c2e63161ae",
+								"value": "Token {{token}}",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/blogs/66/",
+							"raw": "{{host}}/api/v1/blogs/{{blog}}/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
 								"blogs",
-								"66",
+								"{{blog}}",
 								""
 							]
 						}
@@ -329,16 +306,28 @@
 					"name": "Comment Create",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token 97ef37c2edbcdcd7e4cc95afc02f6b1589e602e1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "text",
+									"value": "blabla",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/blogs/68/comment/",
+							"raw": "{{host}}/api/v1/blogs/68/comment/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -355,23 +344,25 @@
 					"name": "Comment Delete",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{token}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/blogs/68/comment/99/",
+							"raw": "{{host}}/api/v1/blogs/{{blog}}/comment/{{comment}}/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
 								"blogs",
-								"68",
+								"{{blog}}",
 								"comment",
-								"99",
+								"{{comment}}",
 								""
 							]
 						}
@@ -389,14 +380,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/bloggers/",
+							"raw": "{{host}}/api/v1/bloggers/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -413,19 +400,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/bloggers/11/",
+							"raw": "{{host}}/api/v1/bloggers/{{blogger}}/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
 								"bloggers",
-								"11",
+								"{{blogger}}",
 								""
 							]
 						}
@@ -439,7 +422,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token 97ef37c2edbcdcd7e4cc95afc02f6b1589e602e1",
+								"value": "Token {{token}}",
 								"type": "text"
 							}
 						],
@@ -448,30 +431,26 @@
 							"formdata": [
 								{
 									"key": "bio",
-									"value": "bla bla bio 3",
+									"value": "bla bla bio",
 									"type": "text"
 								},
 								{
 									"key": "avatar",
 									"type": "file",
-									"src": []
+									"src": "/C:/Users/asukh/Downloads/blog/avatars/wong.png"
 								}
 							]
 						},
 						"url": {
-							"raw": "127.0.0.1:8000/api/v1/bloggers/15/profile/",
+							"raw": "{{host}}/api/v1/bloggers/{{blogger}}/profile/",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
 								"bloggers",
-								"15",
+								"{{blogger}}",
 								"profile",
 								""
 							]
@@ -480,6 +459,55 @@
 					"response": []
 				}
 			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "127.0.0.1:8000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "blog",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "comment",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "blogger",
+			"value": "",
+			"type": "string"
 		}
 	]
 }

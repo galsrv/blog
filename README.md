@@ -54,7 +54,7 @@ docker compose -f docker-compose.production.yml up -d
 
 Остановить и удалить контейнеры:
 ```sh
-docker compose down
+docker compose -f docker-compose.production.yml down
 ```
 Тома и их содержимое при этом сохраняются (при сохранении настроек .yml-файла)
 
@@ -131,6 +131,7 @@ sudo certbot renew --pre-hook "service nginx stop" --post-hook "service nginx st
 <ul>
   <li>Добавить процесс CI/CD</li>
   <li>BUG - при создании суперюзера не создается запись в таблице Blogger</li>
+  <li>BUG - при создании через API не создается запись в таблице Blogger </li>
   <li>NICE TO HAVE - Навести порядок с именами url</li>
   <li>NICE TO HAVE - Отключать троттлинг во время тестов</li>
 </ul>
