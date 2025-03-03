@@ -9,14 +9,15 @@ from .cb_views import ContactsFormView, LoginUser, LogoutUser, SignupView
 
 accounts_patterns = [
     path('signup', SignupView.as_view(), name='signup'),
-    path('login/', LoginUser.as_view(), name='login'),
-    path('logout/', LogoutUser.as_view(), name='logout'),
+    path('login/', LoginUser.as_view(), name='mylogin'),
+    path('logout/', LogoutUser.as_view(), name='mylogout'),
 ]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include(accounts_patterns)),
     path('contacts/', ContactsFormView.as_view(), name='contacts'),
+    path('api/', include('api.urls')),
     path('', include('main.urls')),
 ] + debug_toolbar_urls()
 

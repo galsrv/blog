@@ -18,7 +18,7 @@ def signup(request: HttpRequest, *args, **kwargs):
         if form.is_valid():
             user = form.save()
             Blogger.objects.create(user=user, bio=form.cleaned_data['bio'])
-            return redirect('login')
+            return redirect('mylogin')
 
     return render(request, 'form.html', context={'form': form, 'title': 'Signup page'})
 

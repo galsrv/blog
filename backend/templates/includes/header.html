@@ -11,10 +11,10 @@
                 <div class="col"><a class='nav-link link-light' href={% url 'blogger_page' user.id %}>{{ user.username }}</a></div>
                 <div class="col"><a class='nav-link link-light' href={% url 'blogger_profile' %}>My profile</a></div>  
                 <div class="col"><a class='nav-link link-light' href={% url 'blog_create' %}>Create new blog</a></div>
-                <div class="col"><a class='nav-link link-light' href={% url 'logout' %}>Logout</a></div>
+                <div class="col"><a class='nav-link link-light' href={% url 'mylogout' %}>Logout</a></div>
             {% else %}
                 <div class="col"><a class='nav-link link-light' href={% url 'signup' %}>Signup</a></div>
-                <div class="col"><a class='nav-link link-light' href={% url 'login' %}>Login</a></div>
+                <div class="col"><a class='nav-link link-light' href={% url 'mylogin' %}>Login</a></div>
             {% endif %}
         </div>
     </div>

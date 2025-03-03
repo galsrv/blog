@@ -86,14 +86,14 @@ class TestBlogs(TestCase):
         7) POST определяется верный url
         8) пользователь фактически залогинен
         '''
-        response = self.client.get(reverse('login'))
+        response = self.client.get(reverse('mylogin'))
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertIn('form.html', [t.name for t in response.templates])
         self.assertEqual(response.request['PATH_INFO'], '/accounts/login/')
         self.assertIn('form', response.context.keys())
 
         self.assertFalse(get_user(self.client).is_authenticated)
-        response = self.client.post(reverse('login'), {'username': USERNAME1, 'password': PASSWORD}, follow=True)
+        response = self.client.post(reverse('mylogin'), {'username': USERNAME1, 'password': PASSWORD}, follow=True)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertIn('index.html', [t.name for t in response.templates])
         self.assertEqual(response.request['PATH_INFO'], '/')
@@ -110,7 +110,7 @@ class TestBlogs(TestCase):
         self.client.login(username=USERNAME1, password=PASSWORD)
         self.assertTrue(get_user(self.client).is_authenticated)
 
-        response = self.client.get(reverse('logout'), follow=True)
+        response = self.client.get(reverse('mylogout'), follow=True)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertIn('index.html', [t.name for t in response.templates])
         self.assertEqual(response.request['PATH_INFO'], '/')
