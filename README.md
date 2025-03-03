@@ -122,12 +122,15 @@ sudo certbot certificates
 sudo certbot renew --pre-hook "service nginx stop" --post-hook "service nginx start"
 ```
 
+## REST API
+
+Энд поинты перечислены в двух форматах на страницах swagger/ и redoc/
+
 ## Области для развития
 
 <ul>
   <li>Добавить процесс CI/CD</li>
   <li>BUG - при создании суперюзера не создается запись в таблице Blogger</li>
-  <li>NICE TO HAVE Навести порядок с именами url</li>
-  <li>REST API Коллекция Постман</li>
-  <li>REST API Документация</li>
+  <li>NICE TO HAVE - Навести порядок с именами url</li>
+  <li>NICE TO HAVE - Отключать троттлинг во время тестов</li>
 </ul>

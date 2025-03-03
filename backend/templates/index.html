@@ -22,7 +22,6 @@
         The project is based on Python 3.12 and Django 5.1.<br>
         The standard set of MTV - Models, Templates, Views - is used.<br>
         The views have been initially created as functions and then rebuilt as classes.<br>
-        The tests are based on django.test library<br>
         There is quite basic logging-to-file set up.
         <li><b>PostgreSQL</b></li>
         Default DB setup is applied.
@@ -31,6 +30,11 @@
         <li><b>HTMX</b></li>
         You can refresh the bloggers list or update your bio (you have to be authenticated) without reloading the whole page.
         Just wanted to proof this concept by this small piece of HTMX functionality.
+        <li><b>REST API</b></li>
+        Regular set of endpoints is implemented by Django REST Framework. 
+        You can take a look at the description in <a href={% url 'schema-swagger-ui' %}>swagger</a> or <a href={% url 'schema-redoc' %}>redoc</a> formats.
+        <li><b>Tests</b></li>
+        Unit tests are based on django.test and rest_framework.test libraries. 
         <li><b>Github</b></li>
         The source code is released <a href='https://github.com/galsrv/blog'>here</a>.
         <li><b>Docker</b></li>
@@ -42,7 +46,7 @@
         </p>
         <h2>Content</h2>
         <p>
-        Site content is AI generated and doesn't make any sense.
+        Site content is AI-generated and doesn't make any sense.
         </p>  
         <h2>Contacts</h2>
         <p>
