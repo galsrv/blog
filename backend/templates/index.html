@@ -4,53 +4,64 @@
     <div class='container'>
         <h2>Hi,</h2>
         <p>
-        I am Aleksei and this is my pet project.<br>
-        Originally, I was going to get some practice after finishing a few study cources on programming.<br>
-        But, after all, I deciced to keep this modest resorce online and present it as an addition to my CV.<br>
-        My contacts are below the page.
-        </p><p>
-        Site features:
+        I am Aleksei and this is my pet projects site.<br>
+        There are two projects here. Now you are on the main page of the first one, <b>The Blog</b>.<br>
+        The second one, the more complex project, is the <b>HR Bot</b>. You can reach it by this <a href='https://galsrv.com/bot/admin/settings/'>link</a>.<br>
+        Both projects are on <b>Python 3.12</b><br>
+        My contact is below the page.
+        </p>
+        <h2>The Blog project</h2>
+        <p>
+        Project features:
         <ul>
             <li>Blogs creation, editing and deletion</li>
             <li>Commenting on blogs, comments deletion</li>
             <li>Bloggers' pages</li>
         </ul>
-        </p><p>
+        </p>
+        <p>
         Stack and technologies:
         <ul>
-        <li><b>Django</b></li>
-        The project is based on Python 3.12 and Django 5.1.<br>
-        The standard set of MTV - Models, Templates, Views - is used.<br>
-        The views have been initially created as functions and then rebuilt as classes.<br>
-        There is quite basic logging-to-file set up.
-        <li><b>PostgreSQL</b></li>
-        Default DB setup is applied.
-        <li><b>Bootstrap</b></li>
-        As you can notice, Bootstrap styles are applied. The frontend appearance wasn't the goal of the project, but anyway.
-        <li><b>HTMX</b></li>
-        You can refresh the bloggers list or update your bio (you have to be authenticated) without reloading the whole page.
-        Just wanted to proof this concept by this small piece of HTMX functionality.
-        <li><b>REST API</b></li>
-        Regular set of endpoints is implemented by Django REST Framework. 
-        You can take a look at the description in <a href={% url 'schema-swagger-ui' %}>swagger</a> or <a href={% url 'schema-redoc' %}>redoc</a> formats.
-        <li><b>Tests</b></li>
-        Unit tests are based on django.test and rest_framework.test libraries. 
-        <li><b>Github</b></li>
-        The source code is released <a href='https://github.com/galsrv/blog'>here</a>.
-        <li><b>Docker</b></li>
-        The set of containers and volumes is built by Docker Compose
-        <li><b>VPS</b></li>
-        The project is deployed on virtual private server with domain name and SSL certificate. 
-        Nginx is used as a web-server and reverse proxy server.
+            <li><b>Django 5</b>. The standard set of MTV - Models, Templates, Views - is used. The views are created as classes.</li>
+            <li><b>PostgreSQL</b> - default DB setup is applied.</li>
+            <li><b>Bootstrap styles</b> - it is easy and, subjectively, nice.</li>
+            <li><b>HTMX</b> - you can refresh the bloggers list or update your bio (you have to be authenticated) without reloading the whole page. Just wanted to proof this concept.</li>
+            <li><b>REST API</b> by Django REST Framework. Documentation is available in <a href='/swagger/'>swagger</a> or <a href='/redoc/'>redoc</a> formats</li>
+            <li><b>Tests</b> - unit tests are based on django.test and rest_framework.test libraries</li>
         </ul>
         </p>
+        <h2>HR Bot project</h2>
+        <p>
+        Project features:
+        <ul>
+            <li>Telegram Bot with static answers and an option to send message to HR manager</li>
+            <li>Admin panel with static answers' editing and responding to the messages.</li>
+        </ul>
+        </p>
+        <p>
+        Stack and technologies:
+        <ul>
+            <li><b>FastAPI & SQLAlchemy & Alembic</b> for backend.</li>
+            <li><b>Nicegui</b> for frontend.</li>
+            <li><b>Aiogram</b> for bot.</li>
+            <li><b>Pydantic & Pydantic Settings & Loguru</b> globally.</li>
+        </ul>
+        </p>
+        <h2>DevOps</h2>
+        <p><ul>
+            <li><b>Github</b> - the source code is released here: <a href='https://github.com/galsrv/blog'>The Blog</a>, <a href='https://github.com/galsrv/hr_bot'>HR Bot</a>.</li>
+            <li><b>Docker</b> - the set of containers and volumes is built by Docker Compose.</li>
+            <li><b>VPS</b> - the project is deployed on virtual private server with domain name and SSL certificate. Nginx is used as a web-server and reverse proxy server.</li>
+        </ul></p>
+
         <h2>Content</h2>
         <p>
         Site content is AI-generated and doesn't make any sense.
         </p>  
         <h2>Contacts</h2>
         <p>
-        You can reach me by sending a message using this <a href={% url 'contacts' %}>form</a>. It makes sense to include your contacts in the message.
+        Originally there was a web form here. I thought it would be a good idea to let the user fill the form and the e-mail would be sent to me. How naive I was. How many CEO optimization spam I received...<br>
+        Let's try again. You can reach me by sending a message to account with the user name as this site domain stands on Google main mail domain. Will see how it goes. 
         </p>  
     </div>
 {% endblock content %}

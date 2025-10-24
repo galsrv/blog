@@ -1,9 +1,9 @@
-import os
+import os # noqa
 
 from django.contrib.auth import logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.core.mail import send_mail
+from django.core.mail import send_mail # noqa
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, FormView
@@ -49,12 +49,14 @@ class ContactsFormView(FormView):
     def form_valid(self, form):
         message = form.cleaned_data['message']
 
-        send_mail(
-            subject='Message from contact form',
-            message=message,
-            from_email=os.getenv('FROM_EMAIL'),
-            recipient_list=[os.getenv('FROM_EMAIL'), ],
-            fail_silently=True,
-        )
+        # Отправка писем отключена, надоело получать
+
+        # send_mail(
+        #     subject='Message from contact form',
+        #     message=message,
+        #     from_email=os.getenv('FROM_EMAIL'),
+        #     recipient_list=[os.getenv('FROM_EMAIL'), ],
+        #     fail_silently=True,
+        # )
 
         return super().form_valid(form)
